@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { auth, db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import LogoutButton from '../components/LogoutButton';
-import Dashboard from './Dashboard';
+import React, { useEffect, useState } from "react";
+import { auth, db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import LogoutButton from "../components/LogoutButton";
+import Dashboard from "./Dashboard";
 
 export default function UserDashboard() {
-  const [role, setRole] = useState('');
+  const [role, setRole] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,10 +19,9 @@ export default function UserDashboard() {
   }, []);
 
   return (
-    <div className="bg-gray-900 text-white min-h-screen p-6">
-      <h1 className="text-2xl font-bold mb-4">🌱 RootSense Dashboard</h1>
+    <>
       <Dashboard />
-      <div className="mt-6 flex justify-between items-center">
+      {/* <div className="mt-6 flex justify-between items-center">
         <LogoutButton />
         {role && (
           <button
@@ -32,7 +31,7 @@ export default function UserDashboard() {
             Go to {role.charAt(0).toUpperCase() + role.slice(1)} Panel
           </button>
         )}
-      </div>
-    </div>
+      </div> */}
+    </>
   );
 }

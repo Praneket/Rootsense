@@ -13,8 +13,17 @@ import SensorCard from "../components/SensorCard";
 import AdviceCard from "../components/AdviceCard";
 import SensorChart from "../components/SensorChart";
 import Navbar from "../components/Navbar";
-import { getFarmingTip } from "../utils/openai";            // Fallback (OpenAI)
+import { getFarmingTip } from "../utils/openai";
 import { getAgroRecommendation } from "../utils/agrothink"; // Primary (Local API)
+import Carousel from "../components/Carousel";
+import AboutRootSense from "../components/AboutRootSense";
+import SoilTrendSection from "../components/SoilTrendSection";
+import { TypeAnimation } from "react-type-animation";
+import Footer from "../components/Footer";
+import SubscribeSection from "../components/SubscribeSection";
+import FarmerDashboard from "./FarmerDashboard";
+import FarmerFeedback from "../components/FarmerFeedback";
+import AgriBotButton from "../components/AgriButton";
 
 export default function Dashboard() {
   const [data, setData] = useState({});
@@ -97,29 +106,65 @@ export default function Dashboard() {
     speechSynthesis.speak(msg);
   };
 
-  return (
-    <div className="bg-gray-950 min-h-screen text-white">
-      <Navbar />
-      <div className="p-6">
-        <h1 className="text-3xl font-bold mb-4">🌱 AI-Powered Soil Dashboard</h1>
+  const message = `“Your soil is low on potassium. Apply potassium-rich fertilizer
+              tomorrow morning. Also, consider watering the field today to
+              maintain optimal moisture.”`;
 
-        {/* Sensor Readings */}
-        <div className="flex flex-wrap justify-start gap-4">
-          <SensorCard title="Moisture" value={data.moisture} unit="%" />
-          <SensorCard title="Soil pH" value={data.ph} unit="" />
-          <SensorCard title="Temperature" value={data.temperature} unit="°C" />
-          <SensorCard title="NPK (Raw)" value={data.npk} unit="" />
+  return (
+    <div className="bg-white min-h-screen ">
+      <Navbar />
+      <Carousel />
+      <div className="p-6">
+        <AboutRootSense />
+        <SoilTrendSection />
+        <div
+          className="bg-green-50 rounded-xl p-10 my-12 shadow-md"
+          data-aos="fade-up"
+        >
+          <h2 className="text-4xl font-bold text-green-800 mb-6 text-center">
+            Get AI Recommendations
+          </h2>
+          <p className="text-center text-gray-700 mb-6 text-lg max-w-3xl mx-auto">
+            Based on real-time sensor data, RootSense provides actionable
+            AI-driven suggestions to help farmers make smarter decisions for
+            soil health, fertilizer usage, irrigation, and crop planning.
+          </p>
+
+          <div className="bg-white border-l-4 border-green-500 p-6 rounded shadow-inner max-w-2xl mx-auto">
+            <p className="text-lg text-gray-800 italic">
+              <TypeAnimation
+                sequence={[message]}
+                speed={40}
+                wrapper="span"
+                cursor={true}
+                className="text-gray-800 text-base font-medium leading-relaxed"
+              />
+            </p>
+          </div>
         </div>
 
-        {/* AI Advice */}
+        {/*         
         <AdviceCard advice={advice} speak={speak} />
 
-        {/* Sensor Trend Charts */}
-        <SensorChart title="Moisture (%)" dataPoints={moistureLog} color="teal" />
+        
+        <SensorChart
+          title="Moisture (%)"
+          dataPoints={moistureLog}
+          color="teal"
+        />
         <SensorChart title="Soil pH" dataPoints={phLog} color="orange" />
-        <SensorChart title="Temperature (°C)" dataPoints={tempLog} color="red" />
-        <SensorChart title="NPK Level" dataPoints={npkLog} color="purple" />
+        <SensorChart
+          title="Temperature (°C)"
+          dataPoints={tempLog}
+          color="red"
+        />
+        <SensorChart title="NPK Level" dataPoints={npkLog} color="purple" /> */}
+        <FarmerFeedback />
+
+        <SubscribeSection />
+        <AgriBotButton />
       </div>
+      <Footer />
     </div>
   );
 }
