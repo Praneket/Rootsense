@@ -1,4 +1,3 @@
-// src/pages/Dashboard.js
 import React, { useState, useEffect } from "react";
 import { db } from "../firebase";
 import {
@@ -14,7 +13,8 @@ import SensorCard from "../components/SensorCard";
 import AdviceCard from "../components/AdviceCard";
 import SensorChart from "../components/SensorChart";
 import Navbar from "../components/Navbar";
-import { getFarmingTip } from "../utils/openai";
+import { getFarmingTip } from "../utils/openai";            // Fallback (OpenAI)
+import { getAgroRecommendation } from "../utils/agrothink"; // Primary (Local API)
 
 export default function Dashboard() {
   const [data, setData] = useState({});
@@ -24,7 +24,7 @@ export default function Dashboard() {
   const [tempLog, setTempLog] = useState([]);
   const [npkLog, setNpkLog] = useState([]);
 
-  // Live sensor data
+  // 🔴 Live sensor data
   useEffect(() => {
     const unsub = onSnapshot(doc(db, "sensors", "current"), (docSnap) => {
       if (docSnap.exists()) {
@@ -35,14 +35,26 @@ export default function Dashboard() {
     return () => unsub();
   }, []);
 
-  // Generate AI advice when data updates
+  // 🔵 AI Smart Farming Tip Generator
   useEffect(() => {
-    if (data.moisture && data.ph && data.temperature && data.npk) {
-      getFarmingTip(data).then((tip) => setAdvice(tip));
-    }
-  }, [data]);
+  if (data.moisture && data.ph && data.temperature && data.npk) {
+    getAgroRecommendation(data)
+      .then((tip) => {
+        if (!tip || tip.toLowerCase().includes("error")) {
+          throw new Error("Invalid response");
+        }
+        setAdvice(tip);
+      })
+      .catch(async (err) => {
+        console.warn("AgroThink failed. Falling back to OpenAI.", err);
+        const fallback = await getFarmingTip(data);
+        setAdvice(fallback || "⚠️ AI unavailable");
+      });
+  }
+}, [data]);
 
-  // Live historical logs for charts
+
+  // 🟡 Sensor logs for charting
   useEffect(() => {
     const q = query(
       collection(db, "sensor_logs"),
@@ -78,6 +90,7 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, []);
 
+  // 🔊 Text-to-Speech Button
   const speak = () => {
     const msg = new SpeechSynthesisUtterance(advice);
     msg.lang = "en-IN";
@@ -90,7 +103,7 @@ export default function Dashboard() {
       <div className="p-6">
         <h1 className="text-3xl font-bold mb-4">🌱 AI-Powered Soil Dashboard</h1>
 
-        {/* Live Sensor Cards */}
+        {/* Sensor Readings */}
         <div className="flex flex-wrap justify-start gap-4">
           <SensorCard title="Moisture" value={data.moisture} unit="%" />
           <SensorCard title="Soil pH" value={data.ph} unit="" />
@@ -98,10 +111,10 @@ export default function Dashboard() {
           <SensorCard title="NPK (Raw)" value={data.npk} unit="" />
         </div>
 
-        {/* AI Farming Tip */}
+        {/* AI Advice */}
         <AdviceCard advice={advice} speak={speak} />
 
-        {/* Live Charts */}
+        {/* Sensor Trend Charts */}
         <SensorChart title="Moisture (%)" dataPoints={moistureLog} color="teal" />
         <SensorChart title="Soil pH" dataPoints={phLog} color="orange" />
         <SensorChart title="Temperature (°C)" dataPoints={tempLog} color="red" />
