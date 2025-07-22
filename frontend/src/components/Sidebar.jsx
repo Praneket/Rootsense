@@ -16,12 +16,11 @@ import { GiRootTip } from "react-icons/gi";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const navItems = [
-  { name: "Dashboard", icon: <Home />, path: "/farmer" },
+  { name: "Report & Analytics", icon: <BarChart2 />, path: "/farmer" },
   { name: "Soil & Water", icon: <Droplet />, path: "/soil" },
   { name: "Weather", icon: <CloudSun />, path: "/weather" },
   { name: "Task Management", icon: <ListChecks />, path: "/tasks" },
-
-  { name: "Report & Analytics", icon: <BarChart2 />, path: "/reports" },
+  { name: "Home", icon: <Home />, path: "/dashboard" },
 ];
 
 const bottomItems = [
