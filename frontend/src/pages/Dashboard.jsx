@@ -9,6 +9,8 @@ import {
   limit,
 } from "firebase/firestore";
 
+import AOS from "aos";
+import "aos/dist/aos.css";
 import SensorCard from "../components/SensorCard";
 import AdviceCard from "../components/AdviceCard";
 import SensorChart from "../components/SensorChart";
@@ -24,8 +26,20 @@ import SubscribeSection from "../components/SubscribeSection";
 import FarmerDashboard from "./FarmerDashboard";
 import FarmerFeedback from "../components/FarmerFeedback";
 import AgriBotButton from "../components/AgriButton";
+import { Outlet } from "react-router-dom";
+import SimpleModal from "../components/SimpleModal";
+import AgriBotChat from "../components/AgriBotChat";
+import { Bot, Mic, Send, User } from "lucide-react";
+import { TbInnerShadowBottomLeft } from "react-icons/tb";
 
 export default function Dashboard() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true, // Trigger once
+    });
+  }, []);
+
   const [data, setData] = useState({});
   const [advice, setAdvice] = useState("Loading smart farming tip...");
   const [moistureLog, setMoistureLog] = useState([]);
@@ -110,9 +124,29 @@ export default function Dashboard() {
               tomorrow morning. Also, consider watering the field today to
               maintain optimal moisture.”`;
 
+  const [isAgriBotOpen, setIsAgriBotOpen] = useState(false);
+
+  // Function to be passed to Navbar
+  const handleAgriBotOpen = () => {
+    setIsAgriBotOpen(true);
+  };
+
+  const handleAgriBotClose = () => {
+    setIsAgriBotOpen(false);
+  };
+
   return (
     <div className="bg-white min-h-screen ">
-      <Navbar />
+      <Navbar setIsAgriBotOpen={setIsAgriBotOpen} />
+      <div className="">
+        {/* Pass function to Navbar via context or props */}
+
+        {/* Modal rendering here */}
+        <SimpleModal
+          isOpen={isAgriBotOpen}
+          onClose={handleAgriBotClose}
+        ></SimpleModal>
+      </div>
       <Carousel />
       <div className="p-6">
         <AboutRootSense />

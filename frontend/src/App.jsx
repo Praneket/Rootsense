@@ -6,19 +6,29 @@ import ExpertDashboard from "./pages/ExpertDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import PrivateRoute from "./components/PrivateRoute";
 import UserDashboard from "./pages/UserDashboard";
+import SoilAndWater from "./components/SoilAndWater";
+import Weather from "./components/Weather";
+import Taskmanagement from "./components/Taskmanagement";
+import Reviews from "./pages/Reviews";
+import Profile from "./pages/ProfilePage";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import ProfilePage from "./pages/ProfilePage";
+import GovernmentSchemesSection from "./components/GovernmentSchemsSection";
+import Soil from "./pages/Soil";
+import "./ChartSetup";
+import Tasks from "./pages/Tasks";
+import AgriBotButton from "./components/AgriButton";
+
 function App() {
   useEffect(() => {
     AOS.init({
-      duration: 800, // animation duration in ms
-      once: true, // animate only once when in view
-      easing: "ease-in-out",
-      offset: 50, // start animating 50px before element enters view
-      delay: 0, // no delay
+      duration: 800,
+      once: true,
     });
   }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -56,7 +66,49 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/soil"
+          element={
+            <PrivateRoute>
+              <Soil />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/weather"
+          element={
+            <PrivateRoute>
+              <Weather />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/tasks"
+          element={
+            <PrivateRoute>
+              <Tasks />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/reviews"
+          element={
+            <PrivateRoute>
+              <Reviews />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <ProfilePage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
+      <AgriBotButton />
     </BrowserRouter>
   );
 }

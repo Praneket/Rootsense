@@ -92,19 +92,10 @@ function FarmerDashboard() {
   };
   return (
     <div className="flex">
-      <Sidebar />
       <div className="flex-1">
         <FarmerNavbar />
-        <div className="flex  lg:flex-row justify-between items-start lg:items-center bg-gray-50 p-4 rounded-md shadow-sm mb-6">
+        <div className="flex  lg:flex-row justify-end items-start lg:items-center bg-gray-50 p-4 rounded-md shadow-sm mb-6">
           {/* Left */}
-          <div>
-            <p className="text-lg font-medium text-gray-700">
-              Hey...! <span className="ml-1">👋</span>
-            </p>
-            <p className="text-sm text-gray-500">
-              Optimize Your Farm Operations with Real-Time Insights
-            </p>
-          </div>
 
           {/* Right */}
           <div className="flex items-center gap-4 mt-4 lg:mt-0">
